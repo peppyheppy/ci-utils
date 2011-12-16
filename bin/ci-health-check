@@ -32,10 +32,14 @@ end
 
 uri = URI.parse(ARGV[0])
 sess.base_url = "#{uri.scheme}://#{uri.host}"
-sess.headers['User-Agent'] = 'ci-tools/1.0'
+STDOUT.puts sess.base_url
+sess.headers['User-Agent'] = 'ci-utils/1.0'
 resp = sess.get(uri.path)
 
+STDOUT.puts resp.inspect
+
 if resp.status != 200
+  STDERR.puts resp.location
   STDERR.puts resp.status_line
   exit 1
 end
