@@ -1,0 +1,3 @@
+rvm use ree
+rvm gemset create wf-ci-tools
+rvm gemset use wf-ci-tools

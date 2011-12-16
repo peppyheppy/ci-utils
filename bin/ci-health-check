@@ -1,0 +1,44 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'patron'
+require 'optparse'
+require 'URI' unless URI
+# ARGS --host and --basic
+
+options = {}
+parser = OptionParser.new do |opts|
+  opts.banner = "Usage: #{File.basename(__FILE__)} [options] url"
+
+  opts.on("--auth user:pass", "Basic Authentication User name and password") do |v|
+    options[:user], options[:pass] = v.split(':')
+  end
+  opts
+end
+parser.parse!(ARGV)
+if ARGV.empty?
+  STDERR.puts("URL parameter is missing")
+  STDERR.puts(parser.to_s)
+  exit 1
+end
+
+sess = Patron::Session.new
+sess.timeout = 10
+sess.insecure = true
+if options[:user]
+  sess.username = options[:user]
+  sess.password = options[:pass]
+end
+
+uri = URI.parse(ARGV[0])
+sess.base_url = "#{uri.scheme}://#{uri.host}"
+sess.headers['User-Agent'] = 'ci-tools/1.0'
+resp = sess.get(uri.path)
+
+if resp.status != 200
+  STDERR.puts resp.status_line
+  exit 1
+end
+STDOUT.puts resp.status_line
+exit 0
+
