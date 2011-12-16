@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.files       = s.files = `git ls-files`.split("\n")
   s.executables = ['ci-health-check', 'ci-api-check']
   s.add_runtime_dependency "patron"
-  s.add_development_dependency "ruby-debug"
+  s.add_development_dependency "ruby-debug19"
   s.add_development_dependency "webmock"
   s.add_development_dependency "rspec", ["2.6.0"]
 end
